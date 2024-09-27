@@ -21,9 +21,31 @@ class Calulcator {
 
     onEqual() {
         // 구현
-        // this.previousOperation 어떤 연산이 들어왔지
+
+        // this.previousOperation 어떤 연산이 들어왔지 (4칙 연산자 중 하나)
         // this.$previousPreview.textContent, this.$currentPreview.textContent 을 연산한 결과
         // this.$currentPreview.textContent 에 출력
+
+        //operation 받기
+        const operation = this.previousOperation.trim();
+        let result = 0;
+
+        if (operation === "+"){
+            result = +this.$previousPreview.textContent.split("")[0] + +this.$currentPreview.textContent
+        }
+        else if (operation === "-"){
+            result = +this.$previousPreview.textContent.split("")[0] - +this.$currentPreview.textContent
+        }
+        else if (operation === "*"){
+            result = +this.$previousPreview.textContent.split("")[0] * +this.$currentPreview.textContent
+        }
+        else {
+            result = +this.$previousPreview.textContent.split("")[0] / +this.$currentPreview.textContent
+        }
+
+        this.$previousPreview.textContent = "";
+        this.$currentPreview.textContent = result.toString();
+        this.currentOperation = "";
     }
 
     onReset() {
@@ -35,6 +57,8 @@ class Calulcator {
 
     onDelete() {
         // 한개씩 지우기
+        this.$currentPreview.textContent = 
+            this.$currentPreview.textContent.slice(0,-1)
     }
 }
 
@@ -47,6 +71,7 @@ const $multifly = document.querySelector('[data-btn-multifly]')
 
 // 연산
 const $equal = document.querySelector('[data-btn-equal]')
+
 
 // 전체삭제(AC), 삭제
 const $reset = document.querySelector('[data-btn-reset]')
@@ -71,10 +96,17 @@ $numbers.forEach(($number) => {
 
 $operations.forEach(($operation) => {
     $operation.addEventListener('click', (e) => {
+        if (e.target.textContent.trim()==="="){
+            calc.onEqual()
+        }
         calc.onPressOperation(e.target.textContent)
     })
 })
 
 $reset.addEventListener('click', (e) => {
     calc.onReset()
+})
+
+$delete.addEventListener('click', (e)=> {
+    calc.onDelete()
 })
